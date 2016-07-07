@@ -1,0 +1,25 @@
+{
+  "name": "nodenow",
+  "version": "0.0.1",
+  "author": {
+    "name": "Don Yu"
+  },
+  "engines": {
+    "node": ">= 0.6.0",
+    "npm": ">= 1.0.0"
+  },
+  "dependencies": {
+    "body-parser": "1.15.2",
+    "express": "^4.13.4",
+    "ejs": "2.4.2",
+    "request": "2.72.0",
+    "cors" : "2.7.1"
+  },
+  "scripts": {
+      "start": "node server.js"
+    },
+  "devDependencies": {},
+  "bundleDependencies": [],
+  "private": true,
+  "main": "server.js"
+}
