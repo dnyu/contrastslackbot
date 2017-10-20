@@ -1,2 +1,2 @@
-# nodenow
-A truly bare bones boilerplate for node applications
+# Contrast Slackbot Project
+
