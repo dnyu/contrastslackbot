@@ -8,10 +8,8 @@ var get_cve = function(cve, cb){
         var vuln_id = vuln['CVE_data_meta']['ID'];
 
         if(vuln_id === cve){
-            console.log(vuln_id);
 
             var desc = vuln["description"]["description_data"][0]["value"];
-            console.log(desc);
 
             var vuln_prod_list = new Set();
             var vendor_data = vuln['affects']['vendor']['vendor_data'];
@@ -23,11 +21,16 @@ var get_cve = function(cve, cb){
                 }
             }
 
-            console.log(vuln_prod_list);
-            //Vuln_id, desc, 
-            break;
+            cb(cve, desc, Array.from(vuln_prod_list));
+            return;
+
         }
     }
+    cb(null, null, null);
 }
 
-get_cve("CVE-2017-8561", null);
+var to_export = {
+    get_cve : get_cve
+};
+
+module.exports = to_export;

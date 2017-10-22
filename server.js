@@ -11,44 +11,9 @@ var envvars = require('./configsvars.js');
 //Setup Server
 var ipaddress = envvars.ipaddress;
 var port = envvars.port; 
-/*
-//Create Server
-var app = express();
 
-//Configure Server
-//* Parsing for parsing requests
-app.use(bodyParser.json() );       // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-	extended: true
-})); 
-
-//*Allow CORS
-//Should delete this later
-app.all('/*', function(req, res, next) {
-res.header("Access-Control-Allow-Origin", "*");
-res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	next();
-});
-
-//Public files
-app.use(express.static('public'));	//Let's all files in public be viewed through urls
-
-//*Set Views
-app.set('views', path.join(__dirname, 'views'));	//Automatically detects views dir 
-app.set('view engine', 'ejs');	//All views should use ejs instead of html
-
-//*Set Routes
-app.use('/', routes);	//Sets routes to the / after home url
-
-//Start Server
-console.log('Setup Complete');
-app.listen(port, function() {
-          console.log('%s: Node server started on %s:%d ...',
-                      Date(Date.now() ), ipaddress, port);
-      });
-console.log('nodenow nodejs boilerplate developed by Don Yu');
-console.log('Server started: Listening on port ' + port);
-*/
+//Imports for functionality
+var cve_search = require('./command_helpers/read_cve.js');
 
 if (!envvars.api_key) {
     console.log('Error: Specify token in environment');
@@ -69,7 +34,7 @@ var bot = controller.spawn({
 controller.hears(['hello', 'hi'], 'direct_message,direct_mention,mention', function(bot, message) {
 
     bot.api.reactions.add({
-        timestamp: message.ts,
+        timestconsoamp: message.ts,
         channel: message.channel,
         name: 'robot_face',
     }, function(err, res) {
@@ -84,6 +49,30 @@ controller.hears(['hello', 'hi'], 'direct_message,direct_mention,mention', funct
             bot.reply(message, 'Hello ' + user.name + '!!');
         } else {
             bot.reply(message, 'Hello.');
+        }
+    });
+});
+
+controller.hears(['lookup (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
+    var cve = message.match[1];
+    cve_search.get_cve(cve, function(id, desc, vuln_prod_list){
+        if(id != null){
+            if(desc != null){
+                bot.reply(message, desc, function(){
+                    if(vuln_prod_list != null){
+                        bot.reply(message, vuln_prod_list.join(', '));
+                    }
+                    else{
+                        bot.reply(message, "No list of vulnerable products found for " + id);
+                    }
+                });
+            }
+            else{
+                bot.reply(message, "No description found for " + id);
+            }
+        }
+        else{
+            bot.reply(message, "CVE not found!");
         }
     });
 });

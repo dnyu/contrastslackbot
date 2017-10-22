@@ -6,7 +6,7 @@ var port = "80";
 var configs = {
 	ipaddress : ip,
 	port : port,
-    api_key : "no crawl for keys pls"
+    api_key : "xoxb-258967957440-4Zdx0ad7MsBaM3lu6BjPAlf1"
 }
 
 //Exports them
