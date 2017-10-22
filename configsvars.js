@@ -5,7 +5,8 @@ var port = "80";
 //Packages them up
 var configs = {
 	ipaddress : ip,
-	port : port
+	port : port,
+    api_key : "no crawl for keys pls"
 }
 
 //Exports them
