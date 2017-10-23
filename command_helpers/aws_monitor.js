@@ -1,0 +1,6 @@
+/*Managed policy
+AWSCloudTrailReadOnlyAccess
+Managed policy
+CloudWatchReadOnlyAccess
+Managed policy
+CloudWatchEventsReadOnlyAccess*/

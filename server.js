@@ -14,7 +14,26 @@ var port = envvars.port;
 
 //Imports for functionality
 var cve_search = require('./command_helpers/read_cve.js');
+var reddit_search = require('./command_helpers/get_netsec.js');
 
+//Helper functions
+var print_synchronous = function(message, results, counter){
+    if(counter >= results.length){
+        return
+    }
+    else{
+        var title = (results[counter]['title'] != null) ? results[counter]['title'] : "No title!";
+        var url = (results[counter]['url'] != null) ? results[counter]['url'] : "No link!";
+        var date = (results[counter]['date'] != null) ? results[counter]['date'] : "No date for post found!";
+        bot.reply(message, 'Title: ' + title, function(){
+            bot.reply(message, 'Link: ' + url, function(){
+                bot.reply(message, 'Date: ' + date, print_synchronous(message, results, counter + 1));
+            });
+        });
+    }   
+}
+
+//Bot service
 if (!envvars.api_key) {
     console.log('Error: Specify token in environment');
     process.exit(1);
@@ -53,7 +72,7 @@ controller.hears(['hello', 'hi'], 'direct_message,direct_mention,mention', funct
     });
 });
 
-controller.hears(['lookup (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
+controller.hears(['vuln (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
     var cve = message.match[1];
     cve_search.get_cve(cve, function(id, desc, vuln_prod_list){
         if(id != null){
@@ -74,5 +93,12 @@ controller.hears(['lookup (.*)'], 'direct_message,direct_mention,mention', funct
         else{
             bot.reply(message, "CVE not found!");
         }
+    });
+});
+
+controller.hears(['netsec (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
+    var search = message.match[1];
+    reddit_search.get_reddit_results(search, function(results){
+        print_synchronous(message, results, 0);
     });
 });

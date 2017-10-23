@@ -6,7 +6,9 @@ var port = "80";
 var configs = {
 	ipaddress : ip,
 	port : port,
-    api_key : "xoxb-258967957440-4Zdx0ad7MsBaM3lu6BjPAlf1"
+    api_key : ":X",
+    aws_access_key : ":X",
+    aws_secret : ":X"
 }
 
 //Exports them
