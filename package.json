@@ -14,7 +14,8 @@
     "ejs": "2.4.2",
     "request": "2.72.0",
     "cors" : "2.7.1",
-    "botkit" : "*"
+    "botkit" : "*",
+    "aws-sdk" : "*"
   },
   "scripts": {
       "start": "node server.js"

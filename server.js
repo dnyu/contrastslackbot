@@ -15,9 +15,14 @@ var port = envvars.port;
 //Imports for functionality
 var cve_search = require('./command_helpers/read_cve.js');
 var reddit_search = require('./command_helpers/get_netsec.js');
+var aws_state = require('./command_helpers/aws_monitor.js');
 
 //Helper functions
 var print_synchronous = function(message, results, counter){
+    if(results.length == 0){
+        bot.reply(message, 'No results found!');
+        return
+    }
     if(counter >= results.length){
         return
     }
@@ -25,12 +30,13 @@ var print_synchronous = function(message, results, counter){
         var title = (results[counter]['title'] != null) ? results[counter]['title'] : "No title!";
         var url = (results[counter]['url'] != null) ? results[counter]['url'] : "No link!";
         var date = (results[counter]['date'] != null) ? results[counter]['date'] : "No date for post found!";
-        bot.reply(message, 'Title: ' + title, function(){
-            bot.reply(message, 'Link: ' + url, function(){
-                bot.reply(message, 'Date: ' + date, print_synchronous(message, results, counter + 1));
-            });
-        });
-    }   
+        bot.reply(message, {
+                                text : '----------------------------------------- \n Title: ' + title + 
+                                    '\n Date: ' + date + 
+                                    '\n Link: ' + url +
+                                    '\n'
+                            }, print_synchronous(message, results, counter + 1));
+    } 
 }
 
 //Bot service
@@ -44,6 +50,8 @@ var os = require('os');
 
 var controller = Botkit.slackbot({
     debug: true,
+    require_delivery: true,
+    send_via_rtm: true
 });
 
 var bot = controller.spawn({
@@ -100,5 +108,14 @@ controller.hears(['netsec (.*)'], 'direct_message,direct_mention,mention', funct
     var search = message.match[1];
     reddit_search.get_reddit_results(search, function(results){
         print_synchronous(message, results, 0);
+    });
+});
+
+controller.hears(['aws'], 'direct_message,direct_mention,mention', function(bot, message){
+    /*aws_state.get_ct_state(function(events){
+        bot.reply(message, JSON.stringify(events));
+    });*/
+    bot.reply(message, {
+        text: "Hello \n \n Hello"
     });
 });
