@@ -15,9 +15,10 @@ var get_reddit_results = function(term, cb){
                 var curr_result = results[i];
                 var stickied = curr_result['data']['stickied'];
                 var nsfw = curr_result['data']['nsfw'];
+                var is_netsec = curr_result['data']['subreddit'] == 'netsec';
 
                 var result_output = {};
-                if(!stickied && !nsfw){
+                if(!stickied && !nsfw && is_netsec){
                     result_output['title'] = curr_result['data']['title'];
                     result_output['url'] = curr_result['data']['url'];
                     result_output['date'] = new Date(curr_result['data']['created'] * 1000);

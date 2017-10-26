@@ -45,7 +45,27 @@ describe('CVE Identifier Tests', function(){
 });
 
 describe('Reddit NetSec Search Tests', function(){
+    it('Returns at most 3 results', function(){
+        reddit_search.get_reddit_results('security', function(results){
+            assert.equal(3, results.length);
+        });
+    });
 
+    it('Returns an empty list when no results found', function(){
+        reddit_search.get_reddit_results('asdflkasjdf;alkjf12341234', function(results){
+            assert.equal([], results);
+        });
+    });
+
+    it('Returns objects with title, url, created and no other keys', function(){
+        reddit_search.get_reddit_results('security', function(results){
+            for(var i = 0; i < results.length; i++){
+                var result = results[i];
+                console.log(results);
+                assert.equal(new Set(['title', 'url', 'created']), new Set(result.keys()));
+            }
+        });
+    });
 });
 
 describe('AWS Status Tests', function(){

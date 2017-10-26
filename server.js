@@ -58,30 +58,11 @@ var bot = controller.spawn({
     token: envvars.api_key
 }).startRTM();
 
-controller.hears(['hello', 'hi'], 'direct_message,direct_mention,mention', function(bot, message) {
-
-    bot.api.reactions.add({
-        timestconsoamp: message.ts,
-        channel: message.channel,
-        name: 'robot_face',
-    }, function(err, res) {
-        if (err) {
-            bot.botkit.log('Failed to add emoji reaction :(', err);
-        }
-    });
-
-
-    controller.storage.users.get(message.user, function(err, user) {
-        if (user && user.name) {
-            bot.reply(message, 'Hello ' + user.name + '!!');
-        } else {
-            bot.reply(message, 'Hello.');
-        }
-    });
-});
-
 controller.hears(['vuln (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
     var cve = message.match[1];
+    if(cve == null){
+        bot.reply(message, "Add CVE as input argument!");
+    }
     cve_search.get_cve(cve, function(id, desc, vuln_prod_list){
         if(id != null){
             if(desc != null){
@@ -106,6 +87,10 @@ controller.hears(['vuln (.*)'], 'direct_message,direct_mention,mention', functio
 
 controller.hears(['netsec (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
     var search = message.match[1];
+    console.log(message.match.length);
+    if(search == null){
+        bot.reply(message, "Add search term as input argument!");
+    }
     reddit_search.get_reddit_results(search, function(results){
         print_synchronous(message, results, 0);
     });
