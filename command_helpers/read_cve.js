@@ -3,6 +3,7 @@ var cve_json = require('../data/nvdcve-1.0-2017.json');
 
 //Functions
 var get_cve = function(cve, cb){
+    var cve = cve.toUpperCase();
     for(var i = 0; i < cve_json["CVE_Items"].length; i++){
         var vuln = cve_json['CVE_Items'][i]['cve'];
         var vuln_id = vuln['CVE_data_meta']['ID'];

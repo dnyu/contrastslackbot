@@ -15,10 +15,12 @@
     "request": "2.72.0",
     "cors" : "2.7.1",
     "botkit" : "*",
-    "aws-sdk" : "*"
+    "aws-sdk" : "*",
+    "mocha" : "*"
   },
   "scripts": {
-      "start": "node server.js"
+      "start": "node server.js",
+      "test" : "mocha ./tests.js"
     },
   "devDependencies": {},
   "bundleDependencies": [],
