@@ -1,4 +1,4 @@
-# Contrast Slackbot Project
+# Slackbot Project
 
 ## Build
 
