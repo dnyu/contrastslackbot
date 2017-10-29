@@ -68,6 +68,19 @@ var bot = controller.spawn({
     token: envvars["slackAPIKey"]
 }).startRTM();
 
+controller.hears(['help', 'commands'], 'direct_message, direct_mention, mention', function(bot, message){
+    var help_string = '----------------------------------------- \n' +
+                      '\"aws\" : pings AWS server for 10 most recent events from CloudTrail \n' +
+                      '\"vuln CVE-2017-xxxx\" : Replace xxxx with valid CVE code' +
+                      ' to get description and vulnerable systems if applicable \n' +
+                      '\"netsec arg\" : Type netsec and then any search term(s) to grab the latest articles relevent to the search terms \n' +
+                      '\"b64 arg\" : Type b64 then any Base64 encoded string to immediately get a decoded response \n' +
+                      '-----------------------------------------'  
+    bot.reply(message, {
+        text : help_string
+    });
+});
+
 controller.hears(['vuln (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
     var cve = message.match[1];
     if(cve == null){
@@ -102,13 +115,25 @@ controller.hears(['netsec (.*)'], 'direct_message,direct_mention,mention', funct
         bot.reply(message, "Add search term as input argument!");
     }
     reddit_search.get_reddit_results(search, function(results){
-        print_synchronous(message, results, 0);
+        if(results.length == 0){
+            bot.reply(message, "No results found!");
+            return;
+        }
+        print_synchronous(message, results_ordered, 0);
     });
 });
 
 controller.hears(['aws'], 'direct_message,direct_mention,mention', function(bot, message){
     aws_state.get_ct_state(function(events){
-        var events_ordered = events.reverse()
-        print_events(message, events_ordered, 0);
+        if(results.length == 0){
+            bot.reply(message, "No events found, ensure AWS SDK properly configured");
+        }
+        print_events(message, events, 0);
     });
+});
+
+controller.hears(['b64 (.*)'], 'direct_message,direct_mention,mention', function(bot, message){
+    var to_decode = new Buffer(message.match[1], 'base64');
+    var decoded = to_decode.toString();
+    bot.reply(message, "Message decoded from Base64: " + decoded);
 });

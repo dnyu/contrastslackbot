@@ -79,3 +79,7 @@ describe('AWS Status Tests', function(){
         });
     });  
 });
+
+describe('Integration Tests', function(){
+    
+});

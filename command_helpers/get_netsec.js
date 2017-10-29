@@ -7,11 +7,9 @@ var get_reddit_results = function(term, cb){
     request(req_url, function(err, res, body){
         if(!err && res.statusCode == 200){
             var results = JSON.parse(body)['data']['children'];
-            var upper_lim = (3 < results.length) ? 3 : results.length;
-
             var formatted_results = [];
 
-            for(var i = 0; i < upper_lim; i++){
+            for(var i = 0; i < results.length; i++){
                 var curr_result = results[i];
                 var stickied = curr_result['data']['stickied'];
                 var nsfw = curr_result['data']['nsfw'];
@@ -22,13 +20,14 @@ var get_reddit_results = function(term, cb){
                     result_output['title'] = curr_result['data']['title'];
                     result_output['url'] = curr_result['data']['url'];
                     result_output['date'] = new Date(curr_result['data']['created'] * 1000);
-
+                    //Convert epoch to readable time
                     formatted_results.push(result_output); 
                 }
             }
-            cb(formatted_results);
+            var results_ordered = formatted_results.reverse();
+            cb(results_ordered);
         }
-        else{
+        else{   //Case where GET request did not complete successfully
             cb([]);
         }
     });    

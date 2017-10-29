@@ -4,7 +4,7 @@ AWS.config.loadFromPath('./config.json');
 
 var cloudtrail = new AWS.CloudTrail();
 
-var query = { "MaxResults" : 10} //Actual query to pull information from CloudTrail
+var query = {"MaxResults" : 10} //Actual query to pull information from CloudTrail
 
 var get_ct_state = function(cb){
     cloudtrail.lookupEvents(query, function(err,data){
@@ -23,7 +23,8 @@ var get_ct_state = function(cb){
                 add_event['location'] = JSON.parse(body['CloudTrailEvent'])['sourceIPAddress'];
                 events.push(add_event);
             }
-            cb(events);
+            var events_ordered = events.reverse();
+            cb(events_ordered);
         }
     });   
 }

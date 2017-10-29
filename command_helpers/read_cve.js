@@ -8,7 +8,7 @@ var get_cve = function(cve, cb){
         var vuln = cve_json['CVE_Items'][i]['cve'];
         var vuln_id = vuln['CVE_data_meta']['ID'];
 
-        if(vuln_id === cve){
+        if(vuln_id === cve){   
 
             var desc = vuln["description"]["description_data"][0]["value"];
 
@@ -21,13 +21,13 @@ var get_cve = function(cve, cb){
                     vuln_prod_list.add(vuln_product);
                 }
             }
-
             cb(cve, desc, Array.from(vuln_prod_list));
             return;
 
         }
     }
-    cb(null, null, null);
+    cb(null, null, null); //CVE not found
+    return;
 }
 
 var to_export = {
