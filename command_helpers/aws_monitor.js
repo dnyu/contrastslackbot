@@ -30,7 +30,6 @@ var get_ct_state = function(cb){
                 add_event['time'] = body['EventTime'];
                 add_event['user'] = body['Username'];
                 add_event['location'] = JSON.parse(body['CloudTrailEvent'])['sourceIPAddress'];
-                add_event['resources'] = body['Resources'];
                 events.push(add_event);
             }
             cb(events);

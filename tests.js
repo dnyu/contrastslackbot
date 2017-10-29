@@ -69,5 +69,13 @@ describe('Reddit NetSec Search Tests', function(){
 });
 
 describe('AWS Status Tests', function(){
-
+    it('Returns objects with exactly name, time, user and location', function(){
+        aws_state.get_ct_state(function(events){
+            for(var i = 0; i < events.length; i++){
+                var curr_event = events[i];
+                assert.equal(new Set(['name', 'time', 'user', 'location']), 
+                                                        new Set(result.keys()));
+            }
+        });
+    });  
 });

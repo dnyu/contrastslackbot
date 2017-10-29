@@ -1,18 +1,9 @@
 //Load node modules
-var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
-var cors = require('cors');
-
-//Load Dependencies
-var routes = require('./routes/routes.js');
-var envvars = require('./configsvars.js');
-
-//Setup Server
-var ipaddress = envvars.ipaddress;
-var port = envvars.port; 
 
 //Imports for functionality
+var envvars = require('./configsvars.js');
 var cve_search = require('./command_helpers/read_cve.js');
 var reddit_search = require('./command_helpers/get_netsec.js');
 var aws_state = require('./command_helpers/aws_monitor.js');
@@ -37,6 +28,27 @@ var print_synchronous = function(message, results, counter){
                                     '\n'
                             }, print_synchronous(message, results, counter + 1));
     } 
+}
+
+var print_events = function(message, events, counter){
+    if(events.length == 0){
+        bot.reply(message, 'No AWS events found!');
+    }
+    if(counter >= events.length){
+        return
+    }
+    else{
+        var curr_event = events[counter];
+        var event_string = '-------------------------------------- \n' +
+                           'Time: ' + curr_event['time'] + '\n' + 
+                           'Event: ' + curr_event['name'] + '\n' +
+                           'User: ' + curr_event['user'] + '\n' +
+                           'IP: ' + curr_event['location'];
+        bot.reply(message, {
+                        text : event_string
+        }, print_events(message, events, counter + 1));
+
+    }
 }
 
 //Bot service
@@ -97,10 +109,8 @@ controller.hears(['netsec (.*)'], 'direct_message,direct_mention,mention', funct
 });
 
 controller.hears(['aws'], 'direct_message,direct_mention,mention', function(bot, message){
-    /*aws_state.get_ct_state(function(events){
-        bot.reply(message, JSON.stringify(events));
-    });*/
-    bot.reply(message, {
-        text: "Hello \n \n Hello"
+    aws_state.get_ct_state(function(events){
+        var events_ordered = events.reverse()
+        print_events(message, events_ordered, 0);
     });
 });
