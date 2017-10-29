@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var path = require('path');
 
 //Imports for functionality
-var envvars = require('./configsvars.js');
+var envvars = require('./config.json');
 var cve_search = require('./command_helpers/read_cve.js');
 var reddit_search = require('./command_helpers/get_netsec.js');
 var aws_state = require('./command_helpers/aws_monitor.js');
@@ -47,18 +47,16 @@ var print_events = function(message, events, counter){
         bot.reply(message, {
                         text : event_string
         }, print_events(message, events, counter + 1));
-
     }
 }
 
 //Bot service
-if (!envvars.api_key) {
+if (!envvars["slackAPIKey"]) {
     console.log('Error: Specify token in environment');
     process.exit(1);
 }
 
 var Botkit = require('botkit');
-var os = require('os');
 
 var controller = Botkit.slackbot({
     debug: true,
@@ -67,7 +65,7 @@ var controller = Botkit.slackbot({
 });
 
 var bot = controller.spawn({
-    token: envvars.api_key
+    token: envvars["slackAPIKey"]
 }).startRTM();
 
 controller.hears(['vuln (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
@@ -99,7 +97,7 @@ controller.hears(['vuln (.*)'], 'direct_message,direct_mention,mention', functio
 
 controller.hears(['netsec (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
     var search = message.match[1];
-    console.log(message.match.length);
+    console.log(message.match);
     if(search == null){
         bot.reply(message, "Add search term as input argument!");
     }

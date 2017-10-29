@@ -15,7 +15,6 @@
 ### Quicksearch /r/NetSec
 * Accessible search for security related articles posted onto reddit's NetSec subreddit
 * Results are filtered such that no flagged (eg. Monthly discussion thread), nsfw or non-NetSec posts are returned
-* Argument should be a singl word, or a collection of terms stringed `such as this`
 * __Justification__: Staying up to date on relevant events is a key to the security industry. /r/NetSec is a great source of obtaining a variety information. Therefore, when something new pops up (eg. Bad Rabbit, Reaper), one could query the bot to quickly get any relevant articles that are posted onto /r/NetSec.
 
 ### Amazon Web Services status ping
@@ -41,6 +40,10 @@
     * NodeJS allows for easy way to spin up a server, useful, accessible modules
     * Already had a simple boilerplate for NodeJS webapp
     * Botkit provides a simple way to create listeners for my Slackbot
-    * I have previous experience with Amazon Web Services, so this the RTM API is not only more familiar to implement for my, but also allowed me to showcase my experience with AWS
-* Improvements that could be made
+    * I have previous experience with Amazon Web Services, so the RTM API is not only more familiar to implement, but also allows me to showcase my experience with AWS
+* Improvements that could be made (ie. TODO)
+    *Consolidate keys into single file
+    *Help function listing possible commands
+    *Auto-correct function, most likely a node module that could easily be implmented
+    *Catch command but no argument case
 

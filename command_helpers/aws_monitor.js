@@ -1,29 +1,20 @@
-/*Managed policy
-AWSCloudTrailReadOnlyAccess
-Managed policy
-CloudWatchReadOnlyAccess
-Managed policy
-CloudWatchEventsReadOnlyAccess*/
-
 var AWS = require('aws-sdk');
 
-AWS.config.loadFromPath('./aws_config.json');
+AWS.config.loadFromPath('./config.json');
 
 var cloudtrail = new AWS.CloudTrail();
 
-var query = {
-                "MaxResults" : 10
-            }
+var query = { "MaxResults" : 10} //Actual query to pull information from CloudTrail
 
 var get_ct_state = function(cb){
     cloudtrail.lookupEvents(query, function(err,data){
-        if (err) {
+        if (err) {              //AWS SDK handles errors for querying AWS
             console.log("Error", err);
-            cb(null);
+            cb(null);           //Log error, catch with null
           } 
         else {
             var events = [];
-            for(var i = 0; i < data['Events'].length; i++){
+            for(var i = 0; i < data['Events'].length; i++){     //Collect information per event
                 var add_event = {}
                 var body = data['Events'][i]; 
                 add_event['name'] = body['EventName'];

@@ -1,5 +1,7 @@
 {
     "accessKeyId" : ":X",
     "secretAccessKey" : ":X",
-    "region" : "us-east-1"
+    "region" : "us-east-1",
+    "slackAPIKey" : ":X"
 }
+
