@@ -68,11 +68,12 @@ var print_events = function(message, events, counter){
 //Listeners
 controller.hears(['help', 'commands'], 'direct_message, direct_mention, mention', function(bot, message){
     var help_string = '----------------------------------------- \n' +
-                      '\"aws\" : pings AWS server for 10 most recent events from CloudTrail \n' +
+                      '\"aws\" : pings AWS server for 10 most recent events from CloudTrail within last week \n' +
                       '\"vuln CVE-2017-xxxx\" : Replace xxxx with valid CVE code' +
                       ' to get description and vulnerable systems if applicable \n' +
                       '\"netsec arg\" : Type netsec and then any search term(s) to grab the latest articles relevent to the search terms \n' +
                       '\"b64 arg\" : Type b64 then any Base64 encoded string to immediately get a decoded response \n' +
+                      'Ensure that arguments are added correctly for vuln, netsec and b64 or command will not go through \n'
                       '-----------------------------------------'  
     bot.reply(message, {
         text : help_string

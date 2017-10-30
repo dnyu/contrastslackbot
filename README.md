@@ -5,7 +5,7 @@
 ### Commands
 * `vuln "arg"` : Descibes common vulnerability/ exposure and (if relevent) vulnerable products based on code
 * `netsec "arg"` : Returns top (at most) three recent, relevent posts from reddit/r/netsec based on argument provided
-* `aws` : Returns 10 most recent events on AWS System along with time, user, ip etc.
+* `aws` : Returns 10 most recent events within the past week on AWS System along with time, user, ip etc.
 * `b64 "arg"` : Returns "arg" decoded from Base64
 * `help` or `commands` : Lists commands available for SAMSON
 
@@ -21,7 +21,7 @@
 * __Justification__: Staying up to date on relevant events is a key to the security industry. /r/NetSec is a great source of obtaining a variety information. Therefore, when something new pops up (eg. Bad Rabbit, Reaper), one could query the SAMSON to quickly get any relevant articles that are posted onto /r/NetSec.
 
 ### Amazon Web Services status ping
-* Use Amazon's Cloudtrail to be able to get a feed of the 10 most recent events occurring in one's AWS system.
+* Use Amazon's Cloudtrail to be able to get a feed of the 10 most recent events within the past week occurring in one's AWS system.
 * _This depends on providing AWS credentials (ie. AccessKeyID, SecretAccessKey)_
 * Created an IAM user role specifically for SAMSON for security precautions:
     * User role has _read only_ access for CloudWatch and CloudTrail
@@ -39,7 +39,8 @@
     * Leverages the Real Time Messaging API
     * Currently living in a micro EC2 instance on Amazon Web Services
 * How to use
-    * To test out SAMSON in an actual Chat, email: dyu@seas.upenn.edu to get access to a designated workspace with SAMSON. 
+    * To test out SAMSON in an actual Chat, join this designated workspace with SAMSON [here](http://bit.ly/2zR1zGJ)
+    * Talk to SamsonBot under the Apps section of chats 
     * To setup for personal Slack Chat, create new Slack App within a designated Slack Workspace
     * Create Bot User within Slack App, navigate to OAuth & Permissions, copy Bot User OAuth Access Token
     * Config File: config.json
