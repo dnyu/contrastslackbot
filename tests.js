@@ -66,10 +66,19 @@ describe('Reddit NetSec Search Tests', function(){
             }
         });
     });
+
+    it('Reddit results should be sorted by most recent posts first', function(){
+        aws_state.get_ct_state(function(events){
+            var test = events.reduce(function(acc, curr_val, curr_ind, arr){
+                    return (acc && (arr[curr_ind] < arr[curr_ind - 1]));
+                }, 1);
+            assert.true(test);
+        });
+    });
 });
 
 describe('AWS Status Tests', function(){
-    it('Returns objects with exactly name, time, user and location', function(){
+    it('Returns objects with name, time, user and location', function(){
         aws_state.get_ct_state(function(events){
             for(var i = 0; i < events.length; i++){
                 var curr_event = events[i];
@@ -78,8 +87,13 @@ describe('AWS Status Tests', function(){
             }
         });
     });  
-});
 
-describe('Integration Tests', function(){
-    
+    it('AWS Events should be sorted by most recent events first', function(){
+        aws_state.get_ct_state(function(events){
+            var test = events.reduce(function(acc, curr_val, curr_ind, arr){
+                    return (acc && (arr[curr_ind] < arr[curr_ind - 1]));
+                }, 1);
+            assert.true(test);
+        });
+    });
 });
