@@ -20,7 +20,7 @@ var controller = Botkit.slackbot({
 });
 
 var bot = controller.spawn({
-    token: envvars["slackAPIKey"]
+    token: envvars["slackAPIKey"];
 }).startRTM();
 
 //Helper functions
@@ -66,7 +66,7 @@ var print_events = function(message, events, counter){
 }
 
 //Listeners
-controller.hears(['help', 'commands'], 'direct_message, direct_mention, mention', function(bot, message){
+controller.hears(['help', 'commands', 'hi', 'hello'], 'direct_message, direct_mention, mention', function(bot, message){
     var help_string = '----------------------------------------- \n' +
                       '\"aws\" : pings AWS server for 10 most recent events from CloudTrail within last week \n' +
                       '\"vuln CVE-2017-xxxx\" : Replace xxxx with valid CVE code' +
@@ -80,47 +80,53 @@ controller.hears(['help', 'commands'], 'direct_message, direct_mention, mention'
     });
 });
 
-controller.hears(['vuln (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
+controller.hears(['vuln (.*)', 'vuln'], 'direct_message,direct_mention,mention', function(bot, message) {
     var cve = message.match[1];
     if(cve == null){
         bot.reply(message, "Add CVE as input argument!");
+        return;
     }
-    cve_search.get_cve(cve, function(id, desc, vuln_prod_list){
-        if(id != null){
-            if(desc != null){
-                bot.reply(message, desc, function(){
-                    if(vuln_prod_list != null){
-                        bot.reply(message, vuln_prod_list.join(', '));
-                    }
-                    else{
-                        bot.reply(message, "No list of vulnerable products found for " + id);
-                    }
-                });
+    else{
+        cve_search.get_cve(cve, function(id, desc, vuln_prod_list){
+            if(id != null){
+                if(desc != null){
+                    bot.reply(message, desc, function(){
+                        if(vuln_prod_list != null){
+                            bot.reply(message, vuln_prod_list.join(', '));
+                        }
+                        else{
+                            bot.reply(message, "No list of vulnerable products found for " + id);
+                        }
+                    });
+                }
+                else{
+                    bot.reply(message, "No description found for " + id);
+                }
             }
             else{
-                bot.reply(message, "No description found for " + id);
+                bot.reply(message, "CVE not found!");
             }
-        }
-        else{
-            bot.reply(message, "CVE not found!");
-        }
-    });
+        });
+    }
 });
 
-controller.hears(['netsec (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
+controller.hears(['netsec (.*)', 'netsec'], 'direct_message,direct_mention,mention', function(bot, message) {
     var search = message.match[1];
     console.log(message.match);
     if(search == null){
         bot.reply(message, "Add search term as input argument!");
+        return;
     }
-    reddit_search.get_reddit_results(search, function(results){
-        if(results.length == 0){
-            bot.reply(message, "No results found!");
-        }
-        else{
-            print_synchronous(message, results, 0);
-        }
-    });
+    else{
+        reddit_search.get_reddit_results(search, function(results){
+            if(results.length == 0){
+                bot.reply(message, "No results found!");
+            }
+            else{
+                print_synchronous(message, results, 0);
+            }
+        });
+    }
 });
 
 controller.hears(['aws'], 'direct_message,direct_mention,mention', function(bot, message){
@@ -134,10 +140,16 @@ controller.hears(['aws'], 'direct_message,direct_mention,mention', function(bot,
     });
 });
 
-controller.hears(['b64 (.*)'], 'direct_message,direct_mention,mention', function(bot, message){
-    var to_decode = new Buffer(message.match[1], 'base64');
-    var decoded = to_decode.toString();
-    bot.reply(message, "Message decoded from Base64: " + decoded);
+controller.hears(['b64 (.*)', 'b64'], 'direct_message,direct_mention,mention', function(bot, message){
+    if(message.match[1] == null){
+        bot.reply(message, 'Add a base64 string to decode!');
+        return;
+    }
+    else{
+        var to_decode = new Buffer(message.match[1], 'base64');
+        var decoded = to_decode.toString();
+        bot.reply(message, "Message decoded from Base64: " + decoded);
+    }
 });
 
 
