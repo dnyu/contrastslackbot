@@ -20,7 +20,7 @@ var controller = Botkit.slackbot({
 });
 
 var bot = controller.spawn({
-    token: envvars["slackAPIKey"];
+    token: envvars["slackAPIKey"]
 }).startRTM();
 
 //Helper functions
