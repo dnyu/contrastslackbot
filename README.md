@@ -39,7 +39,6 @@
     * Leverages the Real Time Messaging API
     * Currently living in a micro EC2 instance on Amazon Web Services
 * How to use
-    * To test out SAMSON in an actual Chat, join this designated workspace with SAMSON [here](http://bit.ly/2zR1zGJ)
     * Talk to SamsonBot under the Apps section of chats 
     * To setup for personal Slack Chat, create new Slack App within a designated Slack Workspace
     * Create Bot User within Slack App, navigate to OAuth & Permissions, copy Bot User OAuth Access Token
